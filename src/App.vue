@@ -8,9 +8,10 @@
     </p>
     <TheFlag v-if="currentStep < 1"/>
     <HomeMenu @start="moveOneStep" v-if="currentStep < 1"/>
-    <UserRegistration @register="registerUser" v-if="currentStep === 1"/>
-    <QuestionWrapper v-if="phase === 'survey'" @confirm="storeAnswer" :question="questions[currentQuestion]"/>
-    <GoodbyeMessage v-if="phase === 'goodbye'"/>
+    <UserRegistration @register="registerUser" v-if="(currentStep === 1)"/>
+
+    <QuestionWrapper v-if="(phase === 'survey')" @confirm="storeAnswer" :id="currentQuestion" :question="questions[currentQuestion]"/>
+    <GoodbyeMessage v-if="(phase === 'goodbye')"/>
 
 
 </template>
@@ -66,6 +67,15 @@ export default {
             this.opinion.user = username;
             this.moveOneStep();
         },
+        sendDataToAPI(data) {
+            fetch('https://doctypematt.alwaysdata.net/api/opinion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+        }
     },
     watch: {
         currentStep(newValue) {
@@ -74,6 +84,16 @@ export default {
                 console.log(('survey'));
             }
         },
+        phase(newValue) {
+            if (newValue === 'goodbye') {
+                this.opinion.datetime = new Date().toISOString();
+
+
+                // FIXME -- reactivate sendData...
+                // this.sendDataToAPI(this.opinion);
+                console.log(this.opinion);
+            }
+        }
     },
     mounted() {
         // console.log(this.questions);

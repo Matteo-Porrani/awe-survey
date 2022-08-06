@@ -1,6 +1,9 @@
 <template>
+
+    <ProgressBar :counter="id" total="3"/>
     <section class="py-3">
         <div class="container">
+            <p>{{ }}</p>
             <h4 class="fw-bold text-center">{{ question.question }}</h4>
         </div>
     </section>
@@ -25,18 +28,27 @@
 </template>
 
 <script>
+import ProgressBar from './ProgressBar.vue';
+
 export default {
     name: "QuestionWrapper",
+    components: {
+        ProgressBar,
+    },
     props: {
+        id: {
+            type: Number,
+            required: true,
+        },
         question: {
             type: Object,
             required: true,
         }
     },
     data() {
-      return {
-          selectedAnswer: null,
-      }
+        return {
+            selectedAnswer: null,
+        }
     },
     methods: {
         moveToNextQuestion() {
@@ -50,17 +62,17 @@ export default {
 
             const options = document.querySelectorAll('.option-btn');
             options.forEach(opt => {
-               if (opt.dataset.ref === this.selectedAnswer) {
-                   opt.classList.add('btn-danger');
-                   opt.classList.add('fw-bold');
-                   opt.classList.remove('btn-outline-dark');
-                   opt.classList.remove('btn-outline-secondary');
-               } else {
-                   opt.classList.remove('btn-danger');
-                   opt.classList.remove('fw-bold');
-                   opt.classList.remove('btn-outline-dark');
-                   opt.classList.add('btn-outline-secondary');
-               }
+                if (opt.dataset.ref === this.selectedAnswer) {
+                    opt.classList.add('btn-danger');
+                    opt.classList.add('fw-bold');
+                    opt.classList.remove('btn-outline-dark');
+                    opt.classList.remove('btn-outline-secondary');
+                } else {
+                    opt.classList.remove('btn-danger');
+                    opt.classList.remove('fw-bold');
+                    opt.classList.remove('btn-outline-dark');
+                    opt.classList.add('btn-outline-secondary');
+                }
             });
         },
         resetAnswers() {

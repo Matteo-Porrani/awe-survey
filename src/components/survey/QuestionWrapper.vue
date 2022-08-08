@@ -1,7 +1,6 @@
 <template>
 
-    <ProgressBar :counter="id" total="3"/>
-
+    <ProgressBar :counter="parseInt(id) - 1" total="3"/>
 
     <div id="questionBody">
         <section class="py-3">

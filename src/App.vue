@@ -1,4 +1,5 @@
 <template>
+    <canvas id="my-canvas"></canvas>
     <TheHeader :step="currentStep"/>
     <p class="text-center">
         <span class="badge bg-danger">{{ phase }}</span>
@@ -10,13 +11,18 @@
     <HomeMenu @start="moveOneStep" v-if="currentStep < 1"/>
     <UserRegistration @register="registerUser" v-if="(currentStep === 1)"/>
 
-    <QuestionWrapper v-if="(phase === 'survey')" @confirm="storeAnswer" :id="currentQuestion" :question="questions[currentQuestion]"/>
+    <QuestionWrapper v-if="(phase === 'survey')" @confirm="storeAnswer" :id="currentQuestion"
+                     :question="questions[currentQuestion]"/>
     <GoodbyeMessage v-if="(phase === 'goodbye')"/>
+
 
 
 </template>
 
 <script>
+import ConfettiGenerator from "confetti-js";
+
+
 import seedsQuestions from "@/seeds/questions.js";
 import TheHeader from "@/components/layout/TheHeader.vue";
 import TheFlag from "@/components/layout/TheFlag.vue";
@@ -39,14 +45,16 @@ export default {
     data() {
         return {
             questions: seedsQuestions,
-            currentStep: 2,
+            currentStep: 0,
             currentQuestion: 1,
-            phase: 'survey',
+            phase: 'intro',
             opinion: {
                 user: null,
                 datetime: null,
                 answers: []
             },
+            confettiSettings: null,
+            confetti: null
         }
     },
     methods: {
@@ -92,16 +100,41 @@ export default {
                 // FIXME -- reactivate sendData...
                 // this.sendDataToAPI(this.opinion);
                 console.log(this.opinion);
+
+
+                // activate/deactivate confettis
+                this.confetti.render();
+
+                setTimeout(() => {
+                    this.confetti.clear();
+                }, 3000);
+
             }
         }
     },
     mounted() {
         // console.log(this.questions);
+        this.confettiSettings = {
+            target: 'my-canvas',
+            max: 500,
+            rotate: true,
+            props: ['square', 'circle'],
+            clock: 30
+        };
+        this.confetti = new ConfettiGenerator(this.confettiSettings);
+
+
     }
 }
 </script>
 
 <style lang="scss">
+canvas {
+    position: absolute;
+    z-index: 9999;
+    background-color: transparent;
+}
+
 #app {
     font-family: 'Exo 2', sans-serif;
 }

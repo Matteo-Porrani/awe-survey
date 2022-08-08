@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col border border-secondary">
                     <div id="progressBar" class="div" :style="progressWidth"></div>
-                    <p>Question {{ counter }}/{{ total }}</p>
+                    <p>Question {{ counter + 1 }}/{{ total }}</p>
                 </div>
             </div>
         </div>
@@ -37,5 +37,6 @@ export default {
     #progressBar {
         height: 10px;
         background-color: #15d;
+        transition: all .6s ease-out;
     }
 </style>

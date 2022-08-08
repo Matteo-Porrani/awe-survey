@@ -10,6 +10,7 @@
   "dependencies": {
     "@popperjs/core": "^2.11.5",
     "bootstrap": "^5.2.0",
+    "confetti-js": "^0.0.18",
     "core-js": "^3.8.3",
     "vue": "^3.2.13"
   },

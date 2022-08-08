@@ -39,9 +39,9 @@ export default {
     data() {
         return {
             questions: seedsQuestions,
-            currentStep: 0,
+            currentStep: 2,
             currentQuestion: 1,
-            phase: 'intro',
+            phase: 'survey',
             opinion: {
                 user: null,
                 datetime: null,

@@ -1,30 +1,43 @@
 <template>
 
     <ProgressBar :counter="id" total="3"/>
-    <section class="py-3">
-        <div class="container">
-            <p>{{ }}</p>
-            <h4 class="fw-bold text-center">{{ question.question }}</h4>
-        </div>
-    </section>
 
 
-    <section class="py-3 mt-3">
-        <div class="container">
-            <div v-for="(ans, idx) in question.answers" :key="idx" class="text-center">
-                <div @click="selectAnswer" :data-ref="idx"
-                     class="option-btn btn btn-outline-dark m-2">{{ ans }}
+    <div id="questionBody">
+        <section class="py-3">
+            <div class="container">
+                <p>{{ }}</p>
+                <h4 class="fw-bold text-center">{{ question.question }}</h4>
+            </div>
+        </section>
+
+
+        <section class="py-3 mt-3">
+            <div class="container">
+                <div v-for="(ans, idx) in question.answers" :key="idx" class="text-center">
+
+                    <div @click="selectAnswer" :data-ref="idx"
+                         class="answer-btn btn m-2"
+                         :class="getAnswerBtnClass(idx)"
+                    >{{ ans }}
+                    </div>
+
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
 
-    <section class="py-3 mt-3 text-center">
-        <div class="container">
-            <button @click="moveToNextQuestion" class="btn btn-warning m-2">Confirmer ma réponse</button>
-        </div>
-    </section>
+        <section
+            class="py-3 mt-3 text-center">
+            <div class="container">
+                <button v-if="selectedAnswer != null"
+                        @click="moveToNextQuestion"
+                        class="btn btn-warning m-2"
+                >Confirmer ma réponse
+                </button>
+            </div>
+        </section>
+    </div>
 </template>
 
 <script>
@@ -50,7 +63,11 @@ export default {
             selectedAnswer: null,
         }
     },
+    computed: {},
     methods: {
+        getAnswerBtnClass(idx) {
+            return idx == this.selectedAnswer ? 'btn-primary fs-4' : 'btn-outline-dark';
+        },
         moveToNextQuestion() {
             this.$emit('confirm', this.selectedAnswer);
             this.selectedAnswer = null;
@@ -59,21 +76,6 @@ export default {
         selectAnswer(e) {
             console.log(e.target.dataset.ref);
             this.selectedAnswer = e.target.dataset.ref;
-
-            const options = document.querySelectorAll('.option-btn');
-            options.forEach(opt => {
-                if (opt.dataset.ref === this.selectedAnswer) {
-                    opt.classList.add('btn-danger');
-                    opt.classList.add('fw-bold');
-                    opt.classList.remove('btn-outline-dark');
-                    opt.classList.remove('btn-outline-secondary');
-                } else {
-                    opt.classList.remove('btn-danger');
-                    opt.classList.remove('fw-bold');
-                    opt.classList.remove('btn-outline-dark');
-                    opt.classList.add('btn-outline-secondary');
-                }
-            });
         },
         resetAnswers() {
             const options = document.querySelectorAll('.option-btn');
@@ -86,5 +88,37 @@ export default {
 </script>
 
 <style scoped>
+    .answer-btn {
+        transition: all .3s ease-out;
+    }
 
+    #questionBody {
+        animation: questionIntro .6s ease-out;
+    }
+
+    @keyframes questionIntro {
+        0% {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0px);
+            opacity: 1;
+        }
+    }
+
+    button {
+        animation: buttonIn .3s ease-out;
+    }
+
+    @keyframes buttonIn {
+        0% {
+            transform: scale(.9);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
 </style>

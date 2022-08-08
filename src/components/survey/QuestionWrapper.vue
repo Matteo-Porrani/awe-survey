@@ -2,16 +2,16 @@
 
     <ProgressBar :counter="parseInt(id) - 1" total="3"/>
 
-    <div id="questionBody">
-        <section class="py-3">
+    <div>
+        <section id="questionHeader" class="py-3">
             <div class="container">
                 <p>{{ }}</p>
-                <h4 class="fw-bold text-center">{{ question.question }}</h4>
+                <h5 class="fw-bold text-center">{{ question.question }}</h5>
             </div>
         </section>
 
 
-        <section class="py-3 mt-3">
+        <section id="questionAnswers" class="py-3 mt-3">
             <div class="container">
                 <div v-for="(ans, idx) in question.answers" :key="idx" class="text-center">
 
@@ -65,7 +65,7 @@ export default {
     computed: {},
     methods: {
         getAnswerBtnClass(idx) {
-            return idx == this.selectedAnswer ? 'btn-primary fs-4' : 'btn-outline-dark';
+            return idx == this.selectedAnswer ? 'btn-primary fs-5 fw-bold' : 'btn-outline-dark';
         },
         moveToNextQuestion() {
             this.$emit('confirm', this.selectedAnswer);
@@ -91,17 +91,31 @@ export default {
         transition: all .3s ease-out;
     }
 
-    #questionBody {
-        animation: questionIntro .6s ease-out;
+    #questionHeader {
+        animation: questionIn .6s ease-out;
     }
 
-    @keyframes questionIntro {
+    #questionAnswers {
+        opacity: 0;
+        animation: answersIn 1s .6s ease-out forwards;
+    }
+
+    @keyframes questionIn {
         0% {
-            transform: translateY(30px);
+            transform: translateY(20px);
             opacity: 0;
         }
         100% {
             transform: translateY(0px);
+            opacity: 1;
+        }
+    }
+
+    @keyframes answersIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
             opacity: 1;
         }
     }

@@ -1,5 +1,6 @@
 <template>
     <canvas id="my-canvas"></canvas>
+
     <TheHeader :step="currentStep"/>
     <p class="text-center">
         <span class="badge bg-danger">{{ phase }}</span>
@@ -14,14 +15,10 @@
     <QuestionWrapper v-if="(phase === 'survey')" @confirm="storeAnswer" :id="currentQuestion"
                      :question="questions[currentQuestion]"/>
     <GoodbyeMessage v-if="(phase === 'goodbye')"/>
-
-
-
 </template>
 
 <script>
 import ConfettiGenerator from "confetti-js";
-
 
 import seedsQuestions from "@/seeds/questions.js";
 import TheHeader from "@/components/layout/TheHeader.vue";
@@ -64,7 +61,14 @@ export default {
         storeAnswer(choice) {
             this.opinion.answers.push(choice)
             if (this.currentQuestion < 3) {
-                this.currentQuestion++;
+                this.phase = 'transition';
+
+                // to create transition between questions
+                setTimeout(() => {
+                    this.currentQuestion++;
+                    this.phase = 'survey';
+                }, 100);
+
             } else {
                 this.phase = 'goodbye';
             }
